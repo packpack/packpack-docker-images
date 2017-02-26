@@ -13,6 +13,6 @@ repositories:
 
 This repository contains Docker images used by [PackPack].
 
-**Please visit the [primary repository](PackPack) for details.**
+**Please visit the [primary repository][PackPack] for details.**
 
 [PackPack]: https://github.com/packpack/packpack
