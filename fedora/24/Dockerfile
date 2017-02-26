@@ -5,12 +5,12 @@ MAINTAINER Roman Tsisyk <roman@tarantool.org>
 ENV LC_ALL="C.UTF-8" LANG="C.UTF-8"
 
 # Enable extra repositories
-RUN yum -y install \
+RUN dnf -y install \
     wget \
     curl \
     pygpgme \
     yum-utils
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
+#RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
 
 # Install base toolset
 RUN dnf -y group install 'Development Tools'
