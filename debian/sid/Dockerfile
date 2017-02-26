@@ -1,4 +1,4 @@
-FROM debian:sid
+FROM i386/debian:sid
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales

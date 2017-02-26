@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM i386/ubuntu:trusty
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales
@@ -20,10 +20,10 @@ RUN apt-get update && apt-get install -y --force-yes \
     software-properties-common python-software-properties
 #ADD backports.list /etc/apt/sources.list.d/
 #ADD preferences /etc/apt/preferences.d/
-RUN curl -s https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh | bash
-RUN apt-get install -y --force-yes apt=1.2.10
-RUN apt-add-repository -y ppa:george-edison55/precise-backports
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
+#RUN curl -s https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh | bash
+#RUN apt-get install -y --force-yes apt=1.2.10
+#RUN apt-add-repository -y ppa:george-edison55/precise-backports
+#RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
 
 # Install base toolset
 RUN apt-get update && apt-get install -y --force-yes \
