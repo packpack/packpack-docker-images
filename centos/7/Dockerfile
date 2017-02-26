@@ -11,14 +11,13 @@ RUN yum -y install \
     pygpgme \
     yum-utils
 RUN yum -y install epel-release centos-release-scl centos-release-scl-rh
-RUN yum -y install https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-6-x86_64/pgdg-centos96-9.6-3.noarch.rpm
-RUN curl -s https://packagecloud.io/install/repositories/tarantool/1_6/script.rpm.sh | bash
 RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
 
 # Install base toolset
 RUN yum -y groupinstall 'Development Tools'
 RUN yum -y install \
     devtoolset-6-toolchain devtoolset-6-binutils-devel \
+    cmake cmake28 cmake3 \
     sudo
 
 # Enable sudo without tty
@@ -34,27 +33,6 @@ ENV XDG_CONFIG_DIRS=/opt/rh/devtoolset-6/root/etc/xdg:/etc/xdg
 ENV XDG_DATA_DIRS=/opt/rh/devtoolset-6/root/usr/share:/usr/local/share:/usr/share
 # sudo wrapper from devtoolset is buggy, remove it
 RUN rm -f /opt/rh/devtoolset-6/root/usr/bin/sudo
-
-# Install dependencies to speed up builds
-RUN yum -y install \
-    cmake cmake28 cmake3 \
-    openssl-devel \
-    zlib-devel \
-    readline-devel \
-    binutils-devel \
-    libyaml-devel \
-    doxygen \
-    postgresql-devel \
-    mysql-devel \
-    perl \
-    python-pip \
-    python-devel \
-    python-daemon \
-    python-yaml \
-    python-msgpack \
-    python-gevent \
-    python-six \
-    python-sphinx
 
 # A workaround for [Errno 14] HTTP Error 404 - Not Found
 # https://bugs.centos.org/view.php?id=12793

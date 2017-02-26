@@ -24,13 +24,13 @@ RUN curl -s https://packagecloud.io/install/repositories/computology/apt-backpor
 RUN apt-get install -y --force-yes apt=1.2.10
 RUN apt-add-repository -y ppa:george-edison55/precise-backports
 RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
-RUN curl -s https://packagecloud.io/install/repositories/tarantool/1_6/script.deb.sh | bash
 
 # Install base toolset
 RUN apt-get update && apt-get install -y --force-yes \
     sudo \
     git \
     build-essential \
+    cmake \
     gdb \
     ccache \
     devscripts \
@@ -44,25 +44,3 @@ RUN apt-get update && apt-get install -y --force-yes \
 
 # Enable sudo without password
 RUN echo '%adm ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# Install dependencies to speed up builds
-RUN apt-get update && apt-get install -y --force-yes \
-    cmake \
-    libssl-dev \
-    zlib1g-dev \
-    libreadline-dev \
-    binutils-dev \
-    libyaml-dev \
-    doxygen \
-    python-pip \
-    python-dev \
-    python-daemon \
-    python-yaml \
-    python-gevent \
-    python-six \
-    python-sphinx \
-    luajit \
-    lua5.1 liblua5.1-dev \
-    lua5.2 liblua5.2-dev \
-    dh-lua
-RUN pip install msgpack-python

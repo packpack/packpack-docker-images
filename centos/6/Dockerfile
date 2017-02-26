@@ -1,4 +1,4 @@
-FROM centos:6.6
+FROM centos:6
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales
@@ -11,14 +11,13 @@ RUN yum -y install \
     pygpgme \
     yum-utils
 RUN yum -y install epel-release centos-release-scl centos-release-scl-rh
-RUN yum -y install https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-6-x86_64/pgdg-centos96-9.6-3.noarch.rpm
 RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
-RUN curl -s https://packagecloud.io/install/repositories/tarantool/1_6/script.rpm.sh | bash
 
 # Install base toolset
 RUN yum -y groupinstall 'Development Tools'
 RUN yum -y install \
     devtoolset-4-toolchain devtoolset-4-binutils-devel \
+    cmake cmake28 cmake3 \
     sudo
 
 # Enable sudo without tty
@@ -34,25 +33,3 @@ ENV XDG_CONFIG_DIRS=/opt/rh/devtoolset-4/root/etc/xdg:/etc/xdg
 ENV XDG_DATA_DIRS=/opt/rh/devtoolset-4/root/usr/share:/usr/local/share:/usr/share
 # sudo wrapper from devtoolset is buggy, remove it
 RUN rm -f /opt/rh/devtoolset-4/root/usr/bin/sudo
-
-# Install dependencies to speed up builds
-RUN yum -y install \
-    cmake cmake28 cmake3 \
-    openssl-devel \
-    zlib-devel \
-    readline-devel \
-    binutils-devel \
-    libyaml-devel \
-    doxygen \
-    postgresql96-devel \
-    mysql-devel \
-    perl \
-    python-pip \
-    python-devel \
-    python-daemon \
-    python-yaml \
-    python-msgpack \
-    python-gevent \
-    python-six \
-    python-sphinx \
-    python-argparse
