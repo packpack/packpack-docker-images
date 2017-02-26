@@ -22,7 +22,6 @@ RUN apt-get update && apt-get install -y --force-yes \
 #ADD preferences /etc/apt/preferences.d/
 RUN curl -s https://packagecloud.io/install/repositories/computology/apt-backport/script.deb.sh | bash
 RUN apt-get install -y --force-yes apt=1.2.10
-RUN apt-add-repository -y ppa:george-edison55/precise-backports
 RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
 
 # Install base toolset
