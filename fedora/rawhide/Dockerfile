@@ -4,8 +4,12 @@ MAINTAINER Roman Tsisyk <roman@tarantool.org>
 # Fix missing locales
 ENV LC_ALL="C.UTF-8" LANG="C.UTF-8"
 
+# Upgrade Python3, so this does not happen:
+# https://bugzilla.redhat.com/show_bug.cgi?id=1435135
+RUN dnf -y upgrade python3
+
 # Enable extra repositories
-RUN yum -y install \
+RUN dnf -y install \
     wget \
     curl \
     pygpgme \
