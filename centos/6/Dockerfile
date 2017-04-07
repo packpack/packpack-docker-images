@@ -10,8 +10,11 @@ RUN yum -y install \
     curl \
     pygpgme \
     yum-utils
-RUN yum -y install epel-release centos-release-scl centos-release-scl-rh
+RUN yum -y install epel-release
+ADD CentOS-SCLo-scl.repo /etc/yum.repos.d/
+ADD CentOS-SCLo-scl-rh.repo /etc/yum.repos.d/
 RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
+RUN yum makecache && yum clean all
 
 # Install base toolset
 RUN yum -y groupinstall 'Development Tools'
@@ -33,7 +36,3 @@ ENV XDG_CONFIG_DIRS=/opt/rh/devtoolset-6/root/etc/xdg:/etc/xdg
 ENV XDG_DATA_DIRS=/opt/rh/devtoolset-6/root/usr/share:/usr/local/share:/usr/share
 # sudo wrapper from devtoolset is buggy, remove it
 RUN rm -f /opt/rh/devtoolset-6/root/usr/bin/sudo
-
-# A workaround for [Errno 14] HTTP Error 404 - Not Found
-# https://bugs.centos.org/view.php?id=12793
-RUN rm -rf /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
