@@ -21,7 +21,8 @@ RUN yum -y groupinstall 'Development Tools'
 RUN yum -y install \
     devtoolset-6-toolchain devtoolset-6-binutils-devel \
     cmake cmake28 cmake3 \
-    sudo
+    sudo \
+    vim-minimal
 
 # Enable sudo without tty
 RUN sed -i.bak -n -e '/^Defaults.*requiretty/ { s/^/# /;};/^%wheel.*ALL$/ { s/^/# / ;} ;/^#.*wheel.*NOPASSWD/ { s/^#[ ]*//;};p' /etc/sudoers
