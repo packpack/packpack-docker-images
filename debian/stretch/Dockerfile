@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --force-yes \
     ca-certificates
 #ADD backports.list /etc/apt/sources.list.d/
 #ADD preferences /etc/apt/preferences.d/
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
+#RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
 
 # Install base toolset
 RUN apt-get update && apt-get install -y --force-yes \
