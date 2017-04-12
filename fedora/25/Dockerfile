@@ -10,7 +10,7 @@ RUN yum -y install \
     curl \
     pygpgme \
     yum-utils
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
+# RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
 
 # Install base toolset
 RUN dnf -y group install 'Development Tools'
