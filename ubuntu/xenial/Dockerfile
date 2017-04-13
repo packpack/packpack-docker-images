@@ -10,6 +10,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Don't install recommends
 RUN echo 'apt::install-recommends "false";' > /etc/apt/apt.conf.d/00recommends
 
+# Fix HTTP 404 when trying to fetch
+# http://security.ubuntu.com/ubuntu/dists/xenial-security/main/binary-arm64/Packages
+ADD sources.list /etc/apt/sources.list
+
 # Enable extra repositories
 RUN apt-get update && apt-get install -y --force-yes \
     apt-transport-https \
