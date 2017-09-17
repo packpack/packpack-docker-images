@@ -1,4 +1,4 @@
-FROM aarch64/debian:sid
+FROM arm64v8/debian:sid
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales

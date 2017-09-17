@@ -1,4 +1,4 @@
-FROM aarch64/debian:jessie
+FROM arm64v8/debian:jessie
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales

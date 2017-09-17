@@ -1,4 +1,4 @@
-FROM aarch64/ubuntu:yakkety
+FROM arm64v8/ubuntu:yakkety
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales

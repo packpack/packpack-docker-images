@@ -1,4 +1,4 @@
-FROM aarch64/ubuntu:trusty
+FROM arm64v8/ubuntu:trusty
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales

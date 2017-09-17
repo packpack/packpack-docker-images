@@ -1,4 +1,4 @@
-FROM aarch64/ubuntu:xenial
+FROM arm64v8/ubuntu:xenial
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales
