@@ -1,4 +1,4 @@
-FROM aarch64/debian:stretch
+FROM arm64v8/debian:stretch
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales

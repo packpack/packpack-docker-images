@@ -1,4 +1,4 @@
-FROM aarch64/fedora:24
+FROM arm64v8/fedora:24
 MAINTAINER Alexey Kopytov <akopytov@gmail.com>
 
 # Fix missing locales

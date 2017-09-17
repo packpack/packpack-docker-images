@@ -1,4 +1,4 @@
-FROM aarch64/ubuntu:zesty
+FROM arm64v8/ubuntu:zesty
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales
