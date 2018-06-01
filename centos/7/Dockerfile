@@ -11,7 +11,6 @@ RUN yum -y install \
     pygpgme \
     yum-utils
 RUN yum -y install epel-release centos-release-scl centos-release-scl-rh
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
 
 # Install base toolset
 RUN yum -y groupinstall 'Development Tools'
