@@ -41,3 +41,21 @@ RUN rm -f /opt/rh/${DEVTOOLSET}/root/usr/bin/sudo
 # https://bugs.centos.org/view.php?id=12793
 RUN sed -e '/\[centos-sclo-sclo-source\]/,+6d' -i /etc/yum.repos.d/CentOS-SCLo-scl.repo
 RUN sed -e '/\[centos-sclo-rh-source\]/,+6d' -i /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
+
+# extras-source is not present for CentOS 7.8, while
+# http://vault.centos.org/centos/7 now points to 7.8.2003.
+#
+# yum-builddep enables the repository and fetching of
+# repomd.xml fails with 404 error.
+#
+# Don't know whether it is temporary effect or not, but
+# it worth to remove the repository until it will be
+# available on CentOS mirrors.
+#
+# How to check:
+#
+# $ curl -fSs 'http://vault.centos.org/centos/7/extras/Source/repodata/repomd.xml'
+# curl: (22) The requested URL returned error: 404 Not Found
+#
+# The output above means that the problem is there.
+RUN sed -e '/\[extras-source\]/,+6d' -i /etc/yum.repos.d/CentOS-Sources.repo
