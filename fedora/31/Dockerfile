@@ -1,5 +1,5 @@
-FROM fedora:rawhide
-MAINTAINER Roman Tsisyk <roman@tarantool.org>
+FROM fedora:31
+MAINTAINER Alexey Kopytov <akopytov@gmail.com>
 
 # Fix missing locales
 ENV LC_ALL="C.UTF-8" LANG="C.UTF-8"
@@ -11,12 +11,8 @@ RUN dnf -y group install 'RPM Development Tools'
 RUN dnf -y install fedora-packager
 RUN dnf -y install sudo git ccache cmake
 
-# The script from packagecloud.io detects the OS as fedora/32 and
-# reports that it does not support this operating system.
-# Commented this out so.
-#
 # Setup backport repository for python2 packages
-# RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
+RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
 
 # Enable cache system-wide
 ENV PATH /usr/lib/ccache:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin

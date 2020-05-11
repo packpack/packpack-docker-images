@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM ubuntu:cosmic
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 # Fix missing locales
@@ -10,18 +10,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Don't install recommends
 RUN echo 'apt::install-recommends "false";' > /etc/apt/apt.conf.d/00recommends
 
-# Drop EOL repositories
-RUN sed -i '/jessie-updates/d' /etc/apt/sources.list
-
 # Enable extra repositories
 RUN apt-get update && apt-get install -y --force-yes \
     apt-transport-https \
     curl \
     wget \
     gnupg \
-    ca-certificates
-ADD preferences /etc/apt/preferences.d/
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
+    ca-certificates \
+    software-properties-common
 
 # Install base toolset
 RUN apt-get update && apt-get install -y --force-yes \
