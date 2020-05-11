@@ -1,0 +1,24 @@
+language: c
+services: docker
+os:
+- linux
+arch:
+- s390x
+sudo: false
+
+env:
+  global:
+    - DOCKER_REPO=${DOCKER_USERNAME}/packpack
+
+# DOCKER_USERNAME and DOCKER_PASSWORD need to be secure environment variables either above
+# or in the settings within travis.
+
+script:
+- make -j6 BRANCH=${TRAVIS_BRANCH} build
+- |
+  if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
+   echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+   make -j6 BRANCH=${TRAVIS_BRANCH} push
+  fi
+
+# vim:set et ts=2 sw=2:
