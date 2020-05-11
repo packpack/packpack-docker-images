@@ -1,5 +1,5 @@
-FROM debian:jessie
-MAINTAINER Roman Tsisyk <roman@tarantool.org>
+FROM ubuntu:focal
+MAINTAINER Alexey Kopytov <akopytov@gmail.com>
 
 # Fix missing locales
 ENV LC_ALL="C.UTF-8" LANG="C.UTF-8"
@@ -16,10 +16,8 @@ RUN apt-get update && apt-get install -y --force-yes \
     curl \
     wget \
     gnupg \
-    ca-certificates
-ADD backports.list /etc/apt/sources.list.d/
-ADD preferences /etc/apt/preferences.d/
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
+    ca-certificates \
+    software-properties-common
 
 # Install base toolset
 RUN apt-get update && apt-get install -y --force-yes \
