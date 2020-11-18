@@ -1,6 +1,11 @@
 FROM opensuse/leap:15.0
 MAINTAINER Alexander V. Tikhonov <avtikhon@gmail.com>
 
+# Add the same repositories based on Yandex paths as default
+RUN for f in /etc/zypp/repos.d/* ; do \
+        sed "s#^\(baseurl=http://download.opensuse.org/\)\(.*\)#\1\2\nhttps://mirror.yandex.ru/opensuse/\2#g" -i $f ; \
+    done
+
 # Install base toolset
 RUN zypper install -y \
     autoconf \
