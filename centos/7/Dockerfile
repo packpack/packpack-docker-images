@@ -20,6 +20,8 @@ RUN yum -y groupinstall 'Development Tools'
 RUN yum -y install \
     ${DEVTOOLSET}-toolchain ${DEVTOOLSET}-binutils-devel \
     cmake cmake28 cmake3 \
+    python3 \
+    python3-devel \
     sudo
 
 # Enable sudo without tty

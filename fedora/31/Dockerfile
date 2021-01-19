@@ -9,7 +9,7 @@ RUN dnf -y group install 'Development Tools'
 RUN dnf -y group install 'C Development Tools and Libraries'
 RUN dnf -y group install 'RPM Development Tools'
 RUN dnf -y install fedora-packager
-RUN dnf -y install sudo git ccache cmake
+RUN dnf -y install sudo git ccache cmake python3
 
 # Setup backport repository for python2 packages
 RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash

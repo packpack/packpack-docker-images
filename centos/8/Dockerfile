@@ -21,6 +21,8 @@ RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/scri
 RUN yum -y groupinstall 'Development Tools'
 RUN yum -y install \
     cmake \
+    python3 \
+    python3-devel \
     sudo
 
 # Enable sudo without tty
