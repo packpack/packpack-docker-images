@@ -1,6 +1,10 @@
 FROM centos:8
 MAINTAINER Alexander V. Tikhonov <avtikhon@tarantool.org>
 
+# Update repositories and installed packages to avoid of issues got at:
+#   https://github.com/tarantool/tarantool-qa/issues/60
+RUN dnf update -v -y
+
 # Enable extra tools
 RUN yum -y install wget yum-utils
 
@@ -24,3 +28,6 @@ RUN yum -y install \
 
 # Enable sudo without tty
 RUN sed -i.bak -n -e '/^Defaults.*requiretty/ { s/^/# /;};/^%wheel.*ALL$/ { s/^/# / ;} ;/^#.*wheel.*NOPASSWD/ { s/^#[ ]*//;};p' /etc/sudoers
+
+# Cleanup DNF metadata and decrease image size
+RUN dnf clean all
