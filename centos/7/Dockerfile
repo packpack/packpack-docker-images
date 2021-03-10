@@ -6,6 +6,10 @@ ARG DEVTOOLSET=devtoolset-8
 # Fix missing locales
 ENV LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8"
 
+# Update repositories and installed packages to avoid of issues got at:
+#   https://github.com/tarantool/tarantool-qa/issues/60
+RUN yum update -v -y
+
 # Enable extra repositories
 RUN yum -y install \
     wget \
@@ -65,3 +69,6 @@ RUN sed -e '/\[updates-source\]/,+6d' -i /etc/yum.repos.d/CentOS-Sources.repo
 
 # The same as above, but for the base-source repository.
 RUN sed -e '/\[base-source\]/,+6d' -i /etc/yum.repos.d/CentOS-Sources.repo
+
+# Cleanup YUM metadata and decrease image size
+RUN yum clean all
