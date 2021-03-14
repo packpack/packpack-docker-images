@@ -12,8 +12,6 @@ RUN yum config-manager --set-enabled PowerTools
 
 # Repository for building/testing dependencies that are not present in vanilla
 # CentOS and PowerTools / EPEL repositories, e.g. some Python 2 packages
-# - fix missing locales
-ENV LC_ALL="C" LANG="en_US.UTF-8"
 # - install the backport repository
 RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
 
