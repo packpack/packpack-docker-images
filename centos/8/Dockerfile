@@ -8,7 +8,8 @@ RUN yum -y install wget yum-utils
 RUN yum -y install epel-release
 # added PowerTools as suggested at:
 #   https://fedoraproject.org/wiki/EPEL
-RUN yum config-manager --set-enabled PowerTools
+RUN sed -i 's/\[PowerTools\]/[powertools]/g' /etc/yum.repos.d/*.repo
+RUN yum config-manager --set-enabled powertools
 
 # Repository for building/testing dependencies that are not present in vanilla
 # CentOS and PowerTools / EPEL repositories, e.g. some Python 2 packages
