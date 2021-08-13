@@ -1,4 +1,5 @@
-FROM fedora:34
+ARG ARCH=
+FROM ${ARCH}fedora:34
 MAINTAINER Vitaliia Ioffe <v.ioffe@tarantool.org>
 
 # Fix missing locales

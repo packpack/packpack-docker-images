@@ -1,4 +1,5 @@
-FROM fedora:33
+ARG ARCH=
+FROM ${ARCH}fedora:33
 MAINTAINER Alexander V. Tikhonov <avtikhon@tarantool.org>
 
 # Fix missing locales

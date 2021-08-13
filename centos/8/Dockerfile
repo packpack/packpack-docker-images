@@ -1,4 +1,5 @@
-FROM centos:8
+ARG ARCH=
+FROM ${ARCH}centos:8
 MAINTAINER Alexander V. Tikhonov <avtikhon@tarantool.org>
 
 # Update repositories and installed packages to avoid of issues got at:

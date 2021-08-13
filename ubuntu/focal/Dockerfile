@@ -1,4 +1,5 @@
-FROM ubuntu:focal
+ARG ARCH=
+FROM ${ARCH}ubuntu:focal
 MAINTAINER Alexey Kopytov <akopytov@gmail.com>
 
 # Fix missing locales
