@@ -1,4 +1,5 @@
-FROM ubuntu:groovy
+ARG ARCH=
+FROM ${ARCH}ubuntu:groovy
 MAINTAINER Vitaliia Ioffe <v.ioffe@tarantool.org>
 
 # Fix missing locales

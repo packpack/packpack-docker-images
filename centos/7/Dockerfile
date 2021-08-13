@@ -1,4 +1,5 @@
-FROM centos:7
+ARG ARCH=
+FROM ${ARCH}centos:7
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 ARG DEVTOOLSET=devtoolset-8

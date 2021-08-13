@@ -1,4 +1,5 @@
-FROM ubuntu:hirsute
+ARG ARCH=
+FROM ${ARCH}ubuntu:hirsute
 MAINTAINER Vitaliia Ioffe <vitaioffe@yandex.ru>
 
 # Fix missing locales

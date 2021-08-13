@@ -1,4 +1,5 @@
-FROM debian:buster
+ARG ARCH=
+FROM ${ARCH}debian:buster
 MAINTAINER Alexey Kopytov <akopytov@gmail.com>
 
 # Fix missing locales

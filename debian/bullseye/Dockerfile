@@ -1,4 +1,5 @@
-FROM debian:bullseye
+ARG ARCH=
+FROM ${ARCH}debian:bullseye
 MAINTAINER Andrey Kulikov <amdeich@gmail.com>
 
 # Fix missing locales
