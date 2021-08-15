@@ -27,6 +27,9 @@ RUN yum -y install \
     cmake cmake28 cmake3 \
     sudo
 
+# Fix missing locales
+RUN sudo localedef -i en_US -f UTF-8 en_US.UTF-8
+
 # Enable sudo without tty
 RUN sed -i.bak -n -e '/^Defaults.*requiretty/ { s/^/# /;};/^%wheel.*ALL$/ { s/^/# / ;} ;/^#.*wheel.*NOPASSWD/ { s/^#[ ]*//;};p' /etc/sudoers
 
