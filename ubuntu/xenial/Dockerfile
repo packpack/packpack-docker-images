@@ -22,6 +22,9 @@ RUN apt-get update && apt-get install -y --force-yes \
 #ADD preferences /etc/apt/preferences.d/
 #RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
 
+# Extra repo for debhelper 10 backport
+RUN add-apt-repository -y ppa:jonathonf/debhelper-10
+
 # Install base toolset
 RUN apt-get update && apt-get install -y --force-yes \
     sudo \
