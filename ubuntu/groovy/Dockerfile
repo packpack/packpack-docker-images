@@ -16,6 +16,9 @@ RUN echo 'apt::install-recommends "false";' > /etc/apt/apt.conf.d/00recommends
 # https://gist.github.com/dergachev/f5da514802fcbbb441a1
 RUN sed -i -r 's/(archive|security).ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
 
+# And the same for arm64 mirros.
+RUN sed -i -r 's@ports.ubuntu.com/ubuntu-ports@old-releases.ubuntu.com/ubuntu@g' /etc/apt/sources.list
+
 # Enable extra repositories
 RUN apt-get update && apt-get install -y --force-yes \
     apt-transport-https \
