@@ -2,6 +2,15 @@ ARG ARCH=
 FROM ${ARCH}centos:8
 MAINTAINER Alexander V. Tikhonov <avtikhon@tarantool.org>
 
+# CentOS Linux 8 reached End Of Life on December 31st, 2021. The mirror list
+# with http://mirrorlist.centos.org doesn't work for it. The base URL with
+# http://mirror.centos.org doesn't work as well. So enabling repos from vault
+# mirrors:
+#   https://github.com/CentOS/sig-cloud-instance-images/issues/190
+RUN find /etc/yum.repos.d/ -type f -exec sed -i 's/mirrorlist=/#mirrorlist=/g' {} +
+RUN find /etc/yum.repos.d/ -type f -exec sed -i 's/#baseurl=/baseurl=/g' {} +
+RUN find /etc/yum.repos.d/ -type f -exec sed -i 's/mirror.centos.org/vault.centos.org/g' {} +
+
 # Update repositories and installed packages to avoid of issues got at:
 #   https://github.com/tarantool/tarantool-qa/issues/60
 RUN dnf update -v -y
