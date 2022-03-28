@@ -33,8 +33,14 @@ RUN yum -y install \
     curl \
     pygpgme \
     yum-utils
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
-RUN yum makecache && yum clean all
+RUN curl https://packpack.hb.bizmrg.com/backports/el/6/packpack_backports.repo \
+    --fail \
+    --silent \
+    --show-error \
+    --retry 5 \
+    --retry-delay 5 \
+    --output /etc/yum.repos.d/packpack_backports.repo
+RUN yum -y makecache && yum clean all
 
 # Install base toolset
 RUN yum -y groupinstall 'Development Tools'
