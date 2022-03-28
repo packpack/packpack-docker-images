@@ -28,7 +28,13 @@ RUN yum config-manager --set-enabled powertools
 # Repository for building/testing dependencies that are not present in vanilla
 # CentOS and PowerTools / EPEL repositories, e.g. some Python 2 packages
 # - install the backport repository
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
+RUN curl https://packpack.hb.bizmrg.com/backports/el/8/packpack_backports.repo \
+    --fail \
+    --silent \
+    --show-error \
+    --retry 5 \
+    --retry-delay 5 \
+    --output /etc/yum.repos.d/packpack_backports.repo
 
 # Install base toolset
 RUN yum -y groupinstall 'Development Tools'
