@@ -16,7 +16,13 @@ RUN dnf -y install fedora-packager
 RUN dnf -y install sudo git ccache cmake
 
 # Setup backport repository for python2 packages
-RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
+RUN curl https://packpack.hb.bizmrg.com/backports/fedora/32/packpack_backports.repo \
+    --fail \
+    --silent \
+    --show-error \
+    --retry 5 \
+    --retry-delay 5 \
+    --output /etc/yum.repos.d/packpack_backports.repo
 
 # Enable cache system-wide
 ENV PATH /usr/lib/ccache:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
