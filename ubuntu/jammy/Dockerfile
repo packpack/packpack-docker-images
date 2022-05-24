@@ -36,5 +36,13 @@ RUN apt-get update && apt-get install -y --force-yes \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Enable backports repository
+RUN curl -fsSL http://packpack.hb.bizmrg.com/backports/gpgkey | \
+    gpg --dearmor -o /usr/share/keyrings/packpack-backports-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) \
+    signed-by=/usr/share/keyrings/packpack-backports-keyring.gpg] \
+    http://packpack.hb.bizmrg.com/backports/ubuntu jammy main" | \
+    tee /etc/apt/sources.list.d/backports.list > /dev/null
+
 # Enable sudo without password
 RUN echo '%adm ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
