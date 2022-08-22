@@ -2,6 +2,7 @@ FROM centos:7 as prepare
 MAINTAINER Sergei Vorontsov "piligrim@rootnix.net"
 
 ENV REPO_URL=http://mirror.yandex.ru/redos/7.3/x86_64/os/ \
+    BACKPORTS_REPO_FILE=https://packpack.hb.bizmrg.com/backports/redos/7.3/packpack_backports.repo \
     CHROOT_DIR="/chroot"
 
 RUN mkdir -p $CHROOT_DIR
@@ -61,6 +62,16 @@ RUN rpm --root=$CHROOT_DIR --rebuilddb
 RUN rpm --root=$CHROOT_DIR --nodeps --quiet -i $CHROOT_DIR/redos-release.rpm
 RUN cp $CHROOT_DIR/etc/pki/rpm-gpg/RPM-GPG-KEY-RED-SOFT /etc/pki/rpm-gpg/RPM-GPG-KEY-RED-SOFT
 
+# Setup the backports repository since python3-gevent package is broken
+# on RedOS 7.3 (segfaults).
+RUN curl $BACKPORTS_REPO_FILE \
+    --fail \
+    --silent \
+    --show-error \
+    --retry 5 \
+    --retry-delay 5 \
+    --output $CHROOT_DIR/etc/yum.repos.d/$(basename $BACKPORTS_REPO_FILE)
+
 # Install base toolset for building and packaging projects.
 #
 # The chroot environment has only RedOS repository, so all
@@ -77,19 +88,6 @@ RUN yum -y --installroot=$CHROOT_DIR install \
     sudo \
     dnf-utils
 
-# Install packages needed to build and install gevent using pip
-# (see below).
-#
-# This section can be removed (together with the pip installation
-# of gevent below) if python3-gevent package will be fixed in
-# RedOS 7.3.
-RUN yum -y --installroot=$CHROOT_DIR install \
-    libffi-devel \
-    python3-pip \
-    python3-devel \
-    python3-zope-interface \
-    python3-greenlet
-
 # Enable sudo without tty.
 RUN sed -i -n -e '/^Defaults.*requiretty/ { s/^/# /;};/^%wheel.*ALL$/ { s/^/# / ;} ;/^#.*wheel.*NOPASSWD/ { s/^#[ ]*//;};p' $CHROOT_DIR/etc/sudoers
 
@@ -101,10 +99,5 @@ FROM scratch
 WORKDIR /
 
 COPY --from=prepare /chroot/. /
-
-# python3-gevent package is broken on RedOS 7.3 (segfaults).
-#
-# Install it using pip.
-RUN pip3 install gevent --no-cache-dir
 
 CMD ["/bin/bash"]
