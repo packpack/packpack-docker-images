@@ -5,6 +5,9 @@ MAINTAINER Yaroslav Lobankov <y.lobankov@tarantool.org>
 # Fix missing locales
 ENV LC_ALL="C.UTF-8" LANG="C.UTF-8"
 
+# Replace repositories because fedora 36 reached EOL at 16 May 2023.
+COPY fedora.repo /etc/yum.repos.d/
+
 # Update repositories and installed packages to avoid issues from:
 #   https://github.com/tarantool/tarantool-qa/issues/60
 RUN dnf update -v -y && \
