@@ -3,6 +3,7 @@ FROM ${ARCH}centos:7
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
 ARG DEVTOOLSET=devtoolset-8
+ARG GIT=rh-git227
 
 # Fix missing locales
 ENV LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8"
@@ -30,6 +31,7 @@ RUN curl https://packpack.hb.bizmrg.com/backports/el/7/packpack_backports.repo \
 RUN yum -y groupinstall 'Development Tools'
 RUN yum -y install \
     ${DEVTOOLSET}-toolchain ${DEVTOOLSET}-binutils-devel \
+    ${GIT} \
     cmake cmake28 cmake3 \
     sudo
 
@@ -41,7 +43,7 @@ RUN sed -i.bak -n -e '/^Defaults.*requiretty/ { s/^/# /;};/^%wheel.*ALL$/ { s/^/
 
 # Enable devtoolset and ccache system-wide
 # See /opt/rh/${DEVTOOLSET}/enable
-ENV PATH=/usr/lib64/ccache:/opt/rh/${DEVTOOLSET}/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=/usr/lib64/ccache:/opt/rh/${DEVTOOLSET}/root/usr/bin:/opt/rh/${GIT}/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV LD_LIBRARY_PATH=/opt/rh/${DEVTOOLSET}/root/usr/lib64:/opt/rh/${DEVTOOLSET}/root/usr/lib
 ENV PERL5LIB=/opt/rh/${DEVTOOLSET}/root/usr/lib64/perl5/vendor_perl:/opt/rh/${DEVTOOLSET}/root/usr/lib/perl5:/opt/rh/${DEVTOOLSET}/root/usr/share/perl5/vendor_perl
 ENV PYTHONPATH=/opt/rh/${DEVTOOLSET}/root/usr/lib64/python2.7/site-packages:/opt/rh/${DEVTOOLSET}/root/usr/lib/python2.7/site-packages
