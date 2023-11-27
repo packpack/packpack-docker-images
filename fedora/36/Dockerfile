@@ -5,6 +5,13 @@ MAINTAINER Yaroslav Lobankov <y.lobankov@tarantool.org>
 # Fix missing locales
 ENV LC_ALL="C.UTF-8" LANG="C.UTF-8"
 
+# The support for Fedora Linux ended on May 16, 2023.
+# The package repository has been moved to 
+# http://archives.fedoraproject.org.
+RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/*
+RUN sed -i 's/#baseurl=/baseurl=/g' /etc/yum.repos.d/*
+RUN sed -i 's/download.example\/pub/archives.fedoraproject.org\/pub\/archive/g' /etc/yum.repos.d/*
+
 # Update repositories and installed packages to avoid issues from:
 #   https://github.com/tarantool/tarantool-qa/issues/60
 RUN dnf update -v -y && \
