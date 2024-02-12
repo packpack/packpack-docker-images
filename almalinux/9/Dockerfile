@@ -1,4 +1,5 @@
-FROM almalinux:9
+ARG ARCH=
+FROM ${ARCH}almalinux:9
 MAINTAINER Oleg Chaplashkin <ochaplashkin@tarantool.org>
 
 RUN dnf -y install \
