@@ -28,12 +28,15 @@ RUN curl https://packpack.hb.bizmrg.com/backports/el/7/packpack_backports.repo \
     --output /etc/yum.repos.d/packpack_backports.repo
 
 # Install base toolset
+# perl-IPC-Cmd is required for building OpenSSl 3 it's required for
+# building tarantool 3, easyier resolve it in this image.
 RUN yum -y groupinstall 'Development Tools'
 RUN yum -y install \
     ${DEVTOOLSET}-toolchain ${DEVTOOLSET}-binutils-devel \
     ${GIT} \
     cmake cmake28 cmake3 \
-    sudo
+    sudo \
+    perl-IPC-Cmd
 
 # Fix missing locales
 RUN sudo localedef -i en_US -f UTF-8 en_US.UTF-8
