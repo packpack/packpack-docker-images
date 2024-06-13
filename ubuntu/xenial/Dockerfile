@@ -40,5 +40,12 @@ RUN apt-get update && apt-get install -y --force-yes \
     alien \
     dh-systemd
 
+# Install gcc-8
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y &&  \
+    apt-get update -y &&  \
+    apt-get install gcc-8 g++-8 -y &&  \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-8 &&  \
+    update-alternatives --config gcc
+
 # Enable sudo without password
 RUN echo '%adm ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
