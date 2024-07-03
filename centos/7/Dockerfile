@@ -8,6 +8,21 @@ ARG GIT=rh-git227
 # Fix missing locales
 ENV LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8"
 
+# Set repos url to archive.kernel.org because centos 7 reached EOL and
+# original repos are not available anymore
+RUN if [ $(uname -m) == 'x86_64' ]; then \
+        sed -i '/mirrorlist/d' /etc/yum.repos.d/* \
+        && sed -i 's,#baseurl=http://mirror.centos.org,baseurl=http://archive.kernel.org,g' /etc/yum.repos.d/* \
+        && sed -i 's,# baseurl=http://mirror.centos.org,baseurl=http://archive.kernel.org,g' /etc/yum.repos.d/* \
+        && sed -i 's,$releasever/,7.9.2009/,g' /etc/yum.repos.d/*; \
+    elif [ $(uname -m) == 'aarch64' ]; then \
+        sed -i '/mirrorlist/d' /etc/yum.repos.d/* \
+        && sed -i 's,#baseurl=http://mirror.centos.org,baseurl=http://archive.kernel.org,g' /etc/yum.repos.d/* \
+        && sed -i 's,# baseurl=http://mirror.centos.org,baseurl=http://archive.kernel.org,g' /etc/yum.repos.d/* \
+        && sed -i 's,$releasever/,7.9.2009/,g' /etc/yum.repos.d/* \
+        && sed -i 's,altarch/,centos/altarch/,g' /etc/yum.repos.d/*; \
+    fi
+
 # Update repositories and installed packages to avoid of issues got at:
 #   https://github.com/tarantool/tarantool-qa/issues/60
 RUN yum update -v -y
@@ -19,6 +34,21 @@ RUN yum -y install \
     pygpgme \
     yum-utils
 RUN yum -y install epel-release centos-release-scl centos-release-scl-rh
+
+# Set repos url to archive.kernel.org for SCLo repos
+RUN if [ $(uname -m) == 'x86_64' ]; then \
+        sed -i '/mirrorlist/d' /etc/yum.repos.d/* \
+        && sed -i 's,#baseurl=http://mirror.centos.org,baseurl=http://archive.kernel.org,g' /etc/yum.repos.d/CentOS-SCLo-scl* \
+        && sed -i 's,# baseurl=http://mirror.centos.org,baseurl=http://archive.kernel.org,g' /etc/yum.repos.d/CentOS-SCLo-scl* \
+        && sed -i 's,7/,7.9.2009/,g' /etc/yum.repos.d/CentOS-SCLo-scl*; \
+    elif [ $(uname -m) == 'aarch64' ]; then \
+        sed -i '/mirrorlist/d' /etc/yum.repos.d/* \
+        && sed -i 's,#baseurl=http://mirror.centos.org,baseurl=http://archive.kernel.org,g' /etc/yum.repos.d/* \
+        && sed -i 's,# baseurl=http://mirror.centos.org,baseurl=http://archive.kernel.org,g' /etc/yum.repos.d/* \
+        && sed -i 's,7/,7.9.2009/,g' /etc/yum.repos.d/* \
+        && sed -i 's,centos/,centos/altarch/,g' /etc/yum.repos.d/CentOS-SCLo-scl*; \
+    fi
+
 RUN curl https://packpack.hb.bizmrg.com/backports/el/7/packpack_backports.repo \
     --fail \
     --silent \
