@@ -11,6 +11,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Don't install recommends
 RUN echo 'apt::install-recommends "false";' > /etc/apt/apt.conf.d/00recommends
 
+# Use the archive repository (see https://wiki.debian.org/LTS/Buster)
+ADD sources.list /etc/apt/
+RUN echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf.d/00nocheckvalid
+
 RUN apt-get update && apt-get install -y --force-yes \
     apt-transport-https \
     curl \
