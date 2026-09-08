@@ -1,0 +1,2 @@
+deb http://archive.debian.org/debian bullseye main
+deb http://snapshot.debian.org/archive/debian-security/20260901T000000Z bullseye-security main
