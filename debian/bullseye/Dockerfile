@@ -11,6 +11,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Don't install recommends
 RUN echo 'apt::install-recommends "false";' > /etc/apt/apt.conf.d/00recommends
 
+# Bullseye is oldoldstable; security Release files are expired.
+RUN echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf.d/00nocheckvalid
+
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     curl \
