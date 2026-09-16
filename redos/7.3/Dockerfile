@@ -1,4 +1,4 @@
-FROM registry.red-soft.ru/ubi7/ubi:7.3.4-240219
+FROM registry.red-soft.ru/ubi7/ubi:7.3.7-260914
 
 MAINTAINER Sergei Vorontsov "piligrim@rootnix.net"
 
