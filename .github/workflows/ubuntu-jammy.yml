@@ -1,0 +1,30 @@
+name: ubuntu/jammy
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - ubuntu/jammy/**
+  pull_request:
+    paths:
+      - ubuntu/jammy/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    # A pull request from a branch of this repository is skipped: the push
+    # to that branch builds the same changes.
+    if: >-
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name != github.repository
+    uses: ./.github/workflows/image.yml
+    with:
+      dir: ubuntu/jammy
+      tag: ubuntu-jammy
+    secrets: inherit

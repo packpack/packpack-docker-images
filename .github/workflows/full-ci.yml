@@ -1,0 +1,64 @@
+name: full-ci
+
+# Builds every image on a pull request labeled `full-ci`, e.g. to try a
+# change to the workflows: the image workflows react only to changes in
+# their image directories. Keep the list in line with them.
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    # Adding another label to such a pull request doesn't rebuild everything.
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'full-ci') &&
+      (github.event.action != 'labeled' || github.event.label.name == 'full-ci')
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { dir: almalinux/8, tag: almalinux-8 }
+          - { dir: almalinux/9, tag: almalinux-9 }
+          - { dir: alpine/3.16, tag: alpine-3.16 }
+          - { dir: alpine/3.6, tag: alpine-3.6 }
+          - { dir: astra/1.7, tag: astra-1.7, skip_arm64: true }
+          - { dir: centos/7, tag: centos-7, alias: el-7 }
+          - { dir: centos/8, tag: centos-8, alias: el-8 }
+          - { dir: debian/bookworm, tag: debian-bookworm }
+          - { dir: debian/bullseye, tag: debian-bullseye }
+          - { dir: debian/buster, tag: debian-buster }
+          - { dir: debian/stretch, tag: debian-stretch }
+          - { dir: debian/trixie, tag: debian-trixie }
+          - { dir: fedora/26, tag: fedora-26 }
+          - { dir: fedora/27, tag: fedora-27 }
+          - { dir: fedora/28, tag: fedora-28 }
+          - { dir: fedora/29, tag: fedora-29 }
+          - { dir: fedora/30, tag: fedora-30 }
+          - { dir: fedora/31, tag: fedora-31 }
+          - { dir: fedora/32, tag: fedora-32 }
+          - { dir: fedora/33, tag: fedora-33 }
+          - { dir: fedora/34, tag: fedora-34 }
+          - { dir: fedora/35, tag: fedora-35 }
+          - { dir: fedora/36, tag: fedora-36 }
+          - { dir: fedora/37, tag: fedora-37 }
+          - { dir: fedora/38, tag: fedora-38 }
+          - { dir: fedora/39, tag: fedora-39 }
+          - { dir: opensuse/leap/15.1, tag: opensuse-leap-15.1 }
+          - { dir: opensuse/leap/15.2, tag: opensuse-leap-15.2 }
+          - { dir: redos/7.3, tag: redos-7.3, skip_arm64: true }
+          - { dir: ubuntu/bionic, tag: ubuntu-bionic }
+          - { dir: ubuntu/focal, tag: ubuntu-focal }
+          - { dir: ubuntu/groovy, tag: ubuntu-groovy }
+          - { dir: ubuntu/jammy, tag: ubuntu-jammy }
+          - { dir: ubuntu/noble, tag: ubuntu-noble }
+          - { dir: ubuntu/xenial, tag: ubuntu-xenial }
+    uses: ./.github/workflows/image.yml
+    with:
+      dir: ${{ matrix.dir }}
+      tag: ${{ matrix.tag }}
+      alias: ${{ matrix.alias }}
+      skip_arm64: ${{ matrix.skip_arm64 || false }}

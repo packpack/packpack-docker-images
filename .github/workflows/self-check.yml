@@ -1,0 +1,27 @@
+name: self-check
+
+# Checks that each image directory has its workflow and a full-ci job, and
+# the other way around.
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  self-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check the image directories against the workflows and full-ci
+        run: |
+          cd "$RUNNER_TEMP"
+          git -C "$GITHUB_WORKSPACE" ls-files '*/Dockerfile' |
+              sed 's|/Dockerfile$||' | sort > dirs.txt
+          find "$GITHUB_WORKSPACE/.github/workflows" -name '*.yml' \
+              ! -name image.yml ! -name full-ci.yml ! -name self-check.yml \
+              -exec yq .jobs.image.with.dir {} \; | sort > workflows.txt
+          yq '.jobs.image.strategy.matrix.include[].dir' \
+              "$GITHUB_WORKSPACE/.github/workflows/full-ci.yml" | sort > full-ci-jobs.txt
+          diff -u dirs.txt workflows.txt && diff -u dirs.txt full-ci-jobs.txt
