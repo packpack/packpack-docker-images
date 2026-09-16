@@ -1,0 +1,31 @@
+name: redos/7.3
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - redos/7.3/**
+  pull_request:
+    paths:
+      - redos/7.3/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    # A pull request from a branch of this repository is skipped: the push
+    # to that branch builds the same changes.
+    if: >-
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name != github.repository
+    uses: ./.github/workflows/image.yml
+    with:
+      dir: redos/7.3
+      tag: redos-7.3
+      skip_arm64: true
+    secrets: inherit

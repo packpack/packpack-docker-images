@@ -1,0 +1,104 @@
+name: image
+
+# Builds one image for amd64 and arm64 and, outside pull requests,
+# publishes it. Called by the workflow of each image directory.
+
+on:
+  workflow_call:
+    inputs:
+      dir:
+        description: The image directory, e.g. centos/7.
+        required: true
+        type: string
+      tag:
+        description: The image's tag without the architecture suffix, e.g. centos-7.
+        required: true
+        type: string
+      alias:
+        description: Another tag pushed along with it, e.g. el-7.
+        required: false
+        type: string
+      skip_arm64:
+        description: Build amd64 only, for a base image that has no arm64 variant.
+        required: false
+        type: boolean
+        default: false
+
+env:
+  IMAGE: packpack/packpack
+
+jobs:
+  # A successful build is the test: the Dockerfiles install their packages
+  # from the distribution's repositories, which is what breaks when a
+  # distribution reaches its end of life.
+  build-push-image:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Both, unless the base image has no arm64 variant, so the -amd64 and
+        # -aarch64 tags stay in sync. The -i386 and -armhf tags are left alone.
+        arch: ${{ fromJSON(inputs.skip_arm64 && '["amd64"]' || '["amd64", "arm64"]') }}
+    runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    timeout-minutes: 60
+    # Only master of packpack/packpack-docker-images publishes. Any other
+    # run only builds and needs no credentials.
+    environment: >-
+      ${{ github.repository == 'packpack/packpack-docker-images'
+        && github.ref == 'refs/heads/master' && 'dockerhub' || '' }}
+    env:
+      PUBLISH: >-
+        ${{ github.repository == 'packpack/packpack-docker-images'
+          && github.ref == 'refs/heads/master' }}
+      # packpack pulls <tag>-aarch64 on arm64 and the plain <tag> on x86_64.
+      # The amd64 images are tagged <tag>-amd64.
+      SUFFIX: ${{ matrix.arch == 'arm64' && 'aarch64' || 'amd64' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Log in to Docker Hub
+        if: env.PUBLISH == 'true'
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v7
+        with:
+          context: ${{ inputs.dir }}
+          platforms: linux/${{ matrix.arch }}
+          no-cache: true
+          pull: true
+          push: ${{ env.PUBLISH }}
+          tags: |
+            ${{ env.IMAGE }}:${{ inputs.tag }}-${{ env.SUFFIX }}
+            ${{ inputs.alias && format('{0}:{1}-{2}', env.IMAGE, inputs.alias, env.SUFFIX) || '' }}
+
+  # Runs once both architectures have pushed their tags. If one of them
+  # failed, re-running it brings the tags back in sync.
+  push-manifest:
+    needs: build-push-image
+    if: >-
+      github.repository == 'packpack/packpack-docker-images' &&
+      github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: dockerhub
+    steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Point the multiarch tags at the per-arch images
+        env:
+          TAG: ${{ inputs.tag }}
+          ALIAS: ${{ inputs.alias }}
+          AARCH64: ${{ !inputs.skip_arm64 && format('{0}-aarch64', inputs.tag) || '' }}
+        run: |
+          docker buildx imagetools create \
+              --tag "$IMAGE:$TAG" ${ALIAS:+--tag "$IMAGE:$ALIAS"} \
+              "$IMAGE:$TAG-amd64" ${AARCH64:+"$IMAGE:$AARCH64"}
+          docker buildx imagetools inspect "$IMAGE:$TAG"
