@@ -1,2 +1,0 @@
-deb http://archive.debian.org/debian wheezy-backports main
-deb-src http://archive.debian.org/debian wheezy-backports main
