@@ -2,6 +2,16 @@ ARG ARCH=
 FROM ${ARCH}almalinux:8
 MAINTAINER Oleg Chaplashkin <ochaplashkin@tarantool.org>
 
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+RUN curl https://packpack.hb.vkcs.cloud/backports/almalinux/8/packpack_backports.repo \
+    --fail \
+    --silent \
+    --show-error \
+    --retry 5 \
+    --retry-delay 5 \
+    --output /etc/yum.repos.d/packpack_backports.repo
+
 RUN dnf -y install \
         # Install auxiliary tools.
         sudo \

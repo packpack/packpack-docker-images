@@ -12,6 +12,16 @@ RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/*
 RUN sed -i 's/#baseurl=/baseurl=/g' /etc/yum.repos.d/*
 RUN sed -i 's/download.example\/pub/archives.fedoraproject.org\/pub\/archive/g' /etc/yum.repos.d/*
 
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+RUN curl https://packpack.hb.vkcs.cloud/backports/fedora/36/packpack_backports.repo \
+    --fail \
+    --silent \
+    --show-error \
+    --retry 5 \
+    --retry-delay 5 \
+    --output /etc/yum.repos.d/packpack_backports.repo
+
 # Update repositories and installed packages to avoid issues from:
 #   https://github.com/tarantool/tarantool-qa/issues/60
 RUN dnf update -v -y && \

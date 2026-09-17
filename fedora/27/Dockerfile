@@ -10,7 +10,16 @@ RUN yum -y install \
     curl \
     pygpgme \
     yum-utils
-# RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.rpm.sh | bash
+
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+RUN curl https://packpack.hb.vkcs.cloud/backports/fedora/27/packpack_backports.repo \
+    --fail \
+    --silent \
+    --show-error \
+    --retry 5 \
+    --retry-delay 5 \
+    --output /etc/yum.repos.d/packpack_backports.repo
 
 # Install base toolset
 RUN dnf -y group install 'Development Tools'

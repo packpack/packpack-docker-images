@@ -36,5 +36,18 @@ RUN apt-get update && apt-get install -y --force-yes \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+RUN mkdir -p /etc/apt/keyrings && \
+    curl https://packpack.hb.vkcs.cloud/backports/gpgkey \
+        --fail \
+        --silent \
+        --show-error \
+        --retry 5 \
+        --retry-delay 5 \
+        --output /etc/apt/keyrings/packpack_backports.asc && \
+    echo "deb [signed-by=/etc/apt/keyrings/packpack_backports.asc] https://packpack.hb.vkcs.cloud/backports/ubuntu jammy main" \
+        > /etc/apt/sources.list.d/packpack_backports.list
+
 # Enable sudo without password
 RUN echo '%adm ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
