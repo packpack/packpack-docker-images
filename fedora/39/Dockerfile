@@ -5,6 +5,16 @@ MAINTAINER Oleg Chaplashkin <ochaplashkin@tarantool.org>
 # Fix missing locales
 ENV LC_ALL="C.UTF-8" LANG="C.UTF-8"
 
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+RUN curl https://packpack.hb.vkcs.cloud/backports/fedora/39/packpack_backports.repo \
+    --fail \
+    --silent \
+    --show-error \
+    --retry 5 \
+    --retry-delay 5 \
+    --output /etc/yum.repos.d/packpack_backports.repo
+
 # Update repositories and installed packages to avoid issues from:
 #   https://github.com/tarantool/tarantool-qa/issues/60
 RUN dnf update -v -y && \

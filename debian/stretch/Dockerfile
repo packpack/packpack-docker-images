@@ -21,9 +21,19 @@ RUN apt-get update && apt-get install -y --force-yes \
     wget \
     gnupg \
     ca-certificates
-#ADD backports.list /etc/apt/sources.list.d/
-#ADD preferences /etc/apt/preferences.d/
-#RUN curl -s https://packagecloud.io/install/repositories/packpack/backports/script.deb.sh | bash
+
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+RUN mkdir -p /etc/apt/keyrings && \
+    curl https://packpack.hb.vkcs.cloud/backports/gpgkey \
+        --fail \
+        --silent \
+        --show-error \
+        --retry 5 \
+        --retry-delay 5 \
+        --output /etc/apt/keyrings/packpack_backports.asc && \
+    echo "deb [signed-by=/etc/apt/keyrings/packpack_backports.asc] https://packpack.hb.vkcs.cloud/backports/debian stretch main" \
+        > /etc/apt/sources.list.d/packpack_backports.list
 
 # Install base toolset
 RUN apt-get update && apt-get install -y --force-yes \

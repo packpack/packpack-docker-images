@@ -4,6 +4,23 @@ MAINTAINER Alexander Turenko <alexander.turenko@tarantool.org>
 # Fix missing locales
 ENV LC_ALL="C.UTF-8" LANG="C.UTF-8"
 
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+#
+# dnf of Fedora 30 may be killed by SIGPIPE right after it imports the
+# repository key. The known workaround is to create /run/user/0, where
+# gpg-agent then keeps its sockets:
+# https://bugzilla.redhat.com/show_bug.cgi?id=1769831
+# https://github.com/rpm-software-management/libdnf/pull/869
+RUN mkdir -p /run/user/0 && \
+    curl https://packpack.hb.vkcs.cloud/backports/fedora/30/packpack_backports.repo \
+        --fail \
+        --silent \
+        --show-error \
+        --retry 5 \
+        --retry-delay 5 \
+        --output /etc/yum.repos.d/packpack_backports.repo
+
 # Update repositories and installed packages to avoid of issues got at:
 #   https://github.com/tarantool/tarantool-qa/issues/60
 RUN echo "Remove disabled 'failovermethod' since Fedora 29"
