@@ -25,10 +25,9 @@ RUN yum -y install epel-release
 RUN sed -i 's/\[PowerTools\]/[powertools]/g' /etc/yum.repos.d/*.repo
 RUN yum config-manager --set-enabled powertools
 
-# Repository for building/testing dependencies that are not present in vanilla
-# CentOS and PowerTools / EPEL repositories, e.g. some Python 2 packages
-# - install the backport repository
-RUN curl https://packpack.hb.bizmrg.com/backports/el/8/packpack_backports.repo \
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+RUN curl https://packpack.hb.vkcs.cloud/backports/el/8/packpack_backports.repo \
     --fail \
     --silent \
     --show-error \

@@ -49,7 +49,9 @@ RUN if [ $(uname -m) == 'x86_64' ]; then \
         && sed -i 's,centos/,centos/altarch/,g' /etc/yum.repos.d/CentOS-SCLo-scl*; \
     fi
 
-RUN curl https://packpack.hb.bizmrg.com/backports/el/7/packpack_backports.repo \
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+RUN curl https://packpack.hb.vkcs.cloud/backports/el/7/packpack_backports.repo \
     --fail \
     --silent \
     --show-error \

@@ -2,19 +2,18 @@ FROM registry.red-soft.ru/ubi7/ubi:7.3.7-260914
 
 MAINTAINER Sergei Vorontsov "piligrim@rootnix.net"
 
-ENV BACKPORTS_REPO_FILE=https://packpack.hb.vkcs.cloud/backports/redos/7.3/packpack_backports.repo
-
 # Fix missing locales.
 ENV LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8"
 
-# Install backports repo.
-RUN curl $BACKPORTS_REPO_FILE \
+# Enable the packpack backports repository: dependencies for building and
+# testing that the distribution lacks or ships too old.
+RUN curl https://packpack.hb.vkcs.cloud/backports/redos/7.3/packpack_backports.repo \
     --fail \
     --silent \
     --show-error \
     --retry 5 \
     --retry-delay 5 \
-    --output /etc/yum.repos.d/$(basename $BACKPORTS_REPO_FILE)
+    --output /etc/yum.repos.d/packpack_backports.repo
 
 # Install base toolset for building and packaging projects.
 RUN dnf -y update && \
