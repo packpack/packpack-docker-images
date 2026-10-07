@@ -28,6 +28,7 @@ jobs:
           - { dir: astra/1.7, tag: astra-1.7, skip_arm64: true }
           - { dir: centos/7, tag: centos-7, alias: el-7 }
           - { dir: centos/8, tag: centos-8, alias: el-8 }
+          - { dir: centos/9, tag: centos-9, alias: el-9 }
           - { dir: debian/bookworm, tag: debian-bookworm }
           - { dir: debian/bullseye, tag: debian-bullseye }
           - { dir: debian/buster, tag: debian-buster }
