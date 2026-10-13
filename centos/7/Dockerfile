@@ -2,7 +2,7 @@ ARG ARCH=
 FROM ${ARCH}centos:7
 MAINTAINER Roman Tsisyk <roman@tarantool.org>
 
-ARG DEVTOOLSET=devtoolset-8
+ARG DEVTOOLSET=devtoolset-9
 ARG GIT=rh-git227
 
 # Fix missing locales
