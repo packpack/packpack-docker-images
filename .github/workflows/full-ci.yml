@@ -55,6 +55,7 @@ jobs:
           - { dir: ubuntu/groovy, tag: ubuntu-groovy }
           - { dir: ubuntu/jammy, tag: ubuntu-jammy }
           - { dir: ubuntu/noble, tag: ubuntu-noble }
+          - { dir: ubuntu/resolute, tag: ubuntu-resolute }
           - { dir: ubuntu/xenial, tag: ubuntu-xenial }
     uses: ./.github/workflows/image.yml
     with:
