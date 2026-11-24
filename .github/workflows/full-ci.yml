@@ -47,6 +47,7 @@ jobs:
           - { dir: fedora/37, tag: fedora-37 }
           - { dir: fedora/38, tag: fedora-38 }
           - { dir: fedora/39, tag: fedora-39 }
+          - { dir: fedora/40, tag: fedora-40 }
           - { dir: opensuse/leap/15.1, tag: opensuse-leap-15.1 }
           - { dir: opensuse/leap/15.2, tag: opensuse-leap-15.2 }
           - { dir: redos/7.3, tag: redos-7.3, skip_arm64: true }
